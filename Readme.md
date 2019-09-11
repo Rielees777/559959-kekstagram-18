@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Игорь Кротько](https://up.htmlacademy.ru/javascript/18/user/559959).
-* Наставник: `Неизвестно`.
+* Наставник: [Андрей Слесаренко].
 
 ---
 
