@@ -6,47 +6,60 @@ var COMMENTS_LIST = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
-var AUTHOR_NAMES = ['Игорь', 'РыжийКот', 'ДохлыйЕнот', 'ХитрыйСтраус', 'СизыйЛев']
+var AUTHOR_NAMES = ['Игорь', 'РыжийКот', 'ДохлыйЕнот', 'ХитрыйСтраус', 'СизыйЛев'];
 
-/* Создание функции getRandomNum которая возвращает случайное значение в диапазоне от min до max */
+var pictureElement = document.querySelector('.pictures');
+
+var templatePictures = document.querySelector('#picture').content.querySelector('.picture');
+
+/**
+  * Функция getRandomNum округляет минимальное значение в большую сторону и максимальное  значение в меньшую сторону, возвращает случайное значение в диапазоне от минимального до максимального включительно
+  * @param {number} min, max минимальное и максимальное значения диапазаона
+  * @return {number} randomNumber значение вычесляемое по формуле нахождения случайного  числа в заданном диапазоне
+  */
 var getRandomNum = function(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+  return randomNumber;
 }
 
-/* Функция getMokContent создает мок контент из 25 объектов*/
-var getMokContent = function() {
-  var mokContent = [];
+/**
+  * Функция photosArray создает список из 25 объектов содержащих фото, описание, количество лайков и комментарии.
+  * В функции создается пустой массив для для объектов, далее идет цикл в котором объявляется переменная и в нее записывается объект. После этого в созданный объект последовательно добавляются свойства url картинки, ее описание, количество лайков и комментарии. Комментарии генерируются случайним образом через функцию getRandomNuber.
+  Таким образом мы управляем количством комментариев, используемой аватаркой автора, именем автора и собственно текстом комментария
+  * @return {array} photoList массив из фотографий с определнными параметрами
+  */
+var getPhotosList = function() {
+  var photosList = [];
   for (var i = 1; i < 26; i++) {
-    var mokElement = {};
-    mokElement.url = 'photos/' + i + '.jpg';
-    mokElement.description = 'Картинка №' + i;
-    mokElement.likes = getRandomNum(15, 200);
-    mokElement.comments = [];
+    var photo = {};
+    photo.url = 'photos/' + i + '.jpg';
+    photo.description = 'Картинка №' + i;
+    photo.likes = getRandomNum(15, 200);
+    photo.comments = [];
+
     for (var j = 0; j < getRandomNum(0, 4); j++) {
-      mokElement.comments.push(
-      {
-      avatar: 'img/avatar-' + getRandomNum(1, 6) + '.svg',
-      message: COMMENTS_LIST[getRandomNum(0, COMMENTS_LIST.length-1)],
-      name: AUTHOR_NAMES[getRandomNum(0, AUTHOR_NAMES.length - 1)]
-      }
+      photo.comments.push(
+        {
+          avatar: 'img/avatar-' + getRandomNum(1, 6) + '.svg',
+          message: COMMENTS_LIST[getRandomNum(0, COMMENTS_LIST.length-1)],
+          name: AUTHOR_NAMES[getRandomNum(0, AUTHOR_NAMES.length - 1)]
+        }
       )
     }
-
-mokContent.push(mokElement);
+    photosList.push(photo);
+  }
+  return photosList
 }
-return mokContent
-}
 
-var mokArray = getMokContent();
-var pictureElement = document.querySelector('.pictures')
-var templatePictures = document.querySelector('#picture').content.querySelector('.picture');
+var photosArray = getPhotosList();
 
 for (var i = 0; i < 25; i++) {
-  var newElement = templatePictures.cloneNode(true)
-  newElement.children[0].src = mokArray[i].url
-  newElement.children[1].children[1].textContent = mokArray[i].likes
-  newElement.children[1].children[0].textContent = mokArray[i].comments.length
-  pictureElement.appendChild(newElement)
+  var newPicture = templatePictures.cloneNode(true)
+  newPicture.querySelector('.picture__img').src = photosArray[i].url
+  newPicture.querySelector('.picture__likes').textContent = photosArray[i].likes
+  newPicture.querySelector('.picture__comments').textContent = photosArray[i].comments.length
+
+  pictureElement.appendChild(newPicture)
 }
