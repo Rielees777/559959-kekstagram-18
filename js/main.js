@@ -1,3 +1,4 @@
+
 var COMMENTS_LIST = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -14,15 +15,16 @@ var templatePictures = document.querySelector('#picture').content.querySelector(
 
 /**
   * Функция getRandomNum округляет минимальное значение в большую сторону и максимальное  значение в меньшую сторону, возвращает случайное значение в диапазоне от минимального до максимального включительно
-  * @param {number} min, max минимальное и максимальное значения диапазаона
+  * @param {number} min  минимальное значение диапазаона
+  * @param {number} max  максимальное значение диапазаона
   * @return {number} randomNumber значение вычесляемое по формуле нахождения случайного  числа в заданном диапазоне
   */
-var getRandomNum = function(min, max) {
+var getRandomNum = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
   return randomNumber;
-}
+};
 
 /**
   * Функция photosArray создает список из 25 объектов содержащих фото, описание, количество лайков и комментарии.
@@ -30,7 +32,7 @@ var getRandomNum = function(min, max) {
   Таким образом мы управляем количством комментариев, используемой аватаркой автора, именем автора и собственно текстом комментария
   * @return {array} photoList массив из фотографий с определнными параметрами
   */
-var getPhotosList = function() {
+var getPhotosList = function () {
   var photosList = [];
   for (var i = 1; i < 26; i++) {
     var photo = {};
@@ -41,25 +43,25 @@ var getPhotosList = function() {
 
     for (var j = 0; j < getRandomNum(0, 4); j++) {
       photo.comments.push(
-        {
-          avatar: 'img/avatar-' + getRandomNum(1, 6) + '.svg',
-          message: COMMENTS_LIST[getRandomNum(0, COMMENTS_LIST.length-1)],
-          name: AUTHOR_NAMES[getRandomNum(0, AUTHOR_NAMES.length - 1)]
-        }
-      )
+          {
+            avatar: 'img/avatar-' + getRandomNum(1, 6) + '.svg',
+            message: COMMENTS_LIST[getRandomNum(0, COMMENTS_LIST.length - 1)],
+            name: AUTHOR_NAMES[getRandomNum(0, AUTHOR_NAMES.length - 1)]
+          }
+      );
     }
     photosList.push(photo);
   }
-  return photosList
-}
+  return photosList;
+};
 
 var photosArray = getPhotosList();
 
-for (var i = 0; i < 25; i++) {
-  var newPicture = templatePictures.cloneNode(true)
-  newPicture.querySelector('.picture__img').src = photosArray[i].url
-  newPicture.querySelector('.picture__likes').textContent = photosArray[i].likes
-  newPicture.querySelector('.picture__comments').textContent = photosArray[i].comments.length
+for (var i = 0; i < photosArray.length; i++) {
+  var newPicture = templatePictures.cloneNode(true);
+  newPicture.querySelector('.picture__img').src = photosArray[i].url;
+  newPicture.querySelector('.picture__likes').textContent = photosArray[i].likes;
+  newPicture.querySelector('.picture__comments').textContent = photosArray[i].comments.length;
 
-  pictureElement.appendChild(newPicture)
+  pictureElement.appendChild(newPicture);
 }
