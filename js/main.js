@@ -1,3 +1,4 @@
+'use strict';
 
 var COMMENTS_LIST = [
   'Всё отлично!',
@@ -65,3 +66,29 @@ for (var i = 0; i < photosArray.length; i++) {
 
   pictureElement.appendChild(newPicture);
 }
+
+var MIN_SCALE_VALUE = 25;
+var MAX_SCALE_VALUE = 100;
+var SCALE_STEP = 25;
+
+var scaleButtonBigger = document.querySelector('.scale__control--bigger');
+var scaleButtonSmaller = document.querySelector('.scale__control--smaller');
+var scalePictureValue = document.querySelector('.scale__control--value');
+var picturePreview = document.querySelector('.img-upload__preview');
+
+scaleButtonBigger.addEventListener('click', function () {  
+  var defaultScaleValue = scalePictureValue.value;
+  var defaultPictureSize = parseFloat(defaultScaleValue) / MAX_SCALE_VALUE;
+  if (parseFloat(scalePictureValue.value) < MAX_SCALE_VALUE) {
+    scalePictureValue.value = parseFloat(defaultScaleValue) + SCALE_STEP + '%';
+    picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize + SCALE_STEP / MAX_SCALE_VALUE) + ')';
+  }
+});
+scaleButtonSmaller.addEventListener('click', function () {
+  var defaultScaleValue = scalePictureValue.value;
+  var defaultPictureSize = parseFloat(defaultScaleValue) / MAX_SCALE_VALUE;
+  if (parseFloat(scalePictureValue.value) > MIN_SCALE_VALUE) {
+    scalePictureValue.value = parseFloat(defaultScaleValue) - SCALE_STEP + '%';
+    picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize - SCALE_STEP / MAX_SCALE_VALUE) + ')';
+  }
+});
