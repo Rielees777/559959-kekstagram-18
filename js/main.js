@@ -76,7 +76,7 @@ var scaleButtonSmaller = document.querySelector('.scale__control--smaller');
 var scalePictureValue = document.querySelector('.scale__control--value');
 var picturePreview = document.querySelector('.img-upload__preview');
 
-scaleButtonBigger.addEventListener('click', function () {  
+scaleButtonBigger.addEventListener('click', function () {
   var defaultScaleValue = scalePictureValue.value;
   var defaultPictureSize = parseFloat(defaultScaleValue) / MAX_SCALE_VALUE;
   if (parseFloat(scalePictureValue.value) < MAX_SCALE_VALUE) {
@@ -92,3 +92,27 @@ scaleButtonSmaller.addEventListener('click', function () {
     picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize - SCALE_STEP / MAX_SCALE_VALUE) + ')';
   }
 });
+var effectsList = document.querySelectorAll('.effects__radio');
+var effectsArray = ['None', 'grayscale(0.9)', 'sepia(0.9)', 'invert(100%)', 'blur(3px)', 'brightness(2)'];
+
+for (var j = 0; j < effectsList.length; j++) {
+  console.log(effectsList[j]);
+  effectsList[j].addEventListener('click', function () {
+    picturePreview.style.filter = effectsArray[j];
+  });
+}
+/* effectsList[1].addEventListener('click', function () {
+  picturePreview.style.filter = effectsArray[1];
+});
+effectsList[2].addEventListener('click', function () {
+  picturePreview.style.filter = effectsArray[2];
+});
+effectsList[3].addEventListener('click', function () {
+  picturePreview.style.filter = effectsArray[3];
+});
+effectsList[4].addEventListener('click', function () {
+  picturePreview.style.filter = effectsArray[4];
+});
+effectsList[5].addEventListener('click', function () {
+  picturePreview.style.filter = effectsArray[5];
+}); */
