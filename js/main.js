@@ -67,6 +67,23 @@ for (var i = 0; i < photosArray.length; i++) {
   pictureElement.appendChild(newPicture);
 }
 
+var ESC_BUTTON_CODE = 27;
+var uploadImage = document.querySelector('#upload-file');
+var imageEditForm = document.querySelector('.img-upload__overlay');
+var imageClose = imageEditForm.querySelector('.img-upload__cancel');
+
+uploadImage.addEventListener('change', function () {
+  imageEditForm.classList.remove('hidden');
+});
+imageClose.addEventListener('click', function () {
+  imageEditForm.classList.add('hidden');
+});
+document.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ESC_BUTTON_CODE) {
+    imageEditForm.classList.add('hidden');
+  }
+});
+
 var MIN_SCALE_VALUE = 25;
 var MAX_SCALE_VALUE = 100;
 var SCALE_STEP = 25;
@@ -96,23 +113,25 @@ var effectsList = document.querySelectorAll('.effects__radio');
 var effectsArray = ['None', 'grayscale(0.9)', 'sepia(0.9)', 'invert(100%)', 'blur(3px)', 'brightness(2)'];
 
 for (var j = 0; j < effectsList.length; j++) {
-  console.log(effectsList[j]);
-  effectsList[j].addEventListener('click', function () {
-    picturePreview.style.filter = effectsArray[j];
-  });
+  (function () {
+    var k = j;
+    effectsList[k].addEventListener('click', function () {
+      picturePreview.style.filter = effectsArray[k];
+    });
+  }());
 }
-/* effectsList[1].addEventListener('click', function () {
-  picturePreview.style.filter = effectsArray[1];
+var hashTagsInput = document.querySelector('.text__hashtags');
+
+hashTagsInput.addEventListener('input', function () {
+  var hashTagsArray = hashTagsInput.value.split(' ');
+  if (hashTagsArray.length > 5) {
+    hashTagsInput.setCustomValidity('Количество хэштегов не должно превышать 5');
+  } else {
+    hashTagsInput.setCustomValidity('');
+  }
+  for (var i = 0; i < hashTagsArray.length; i++) {
+    if (hashTagsArray[i][0] !== '#') {
+      hashTagsInput.setCustomValidity('хэштег должен начинаться с символа #');
+    }
+  }
 });
-effectsList[2].addEventListener('click', function () {
-  picturePreview.style.filter = effectsArray[2];
-});
-effectsList[3].addEventListener('click', function () {
-  picturePreview.style.filter = effectsArray[3];
-});
-effectsList[4].addEventListener('click', function () {
-  picturePreview.style.filter = effectsArray[4];
-});
-effectsList[5].addEventListener('click', function () {
-  picturePreview.style.filter = effectsArray[5];
-}); */
