@@ -4,7 +4,7 @@
  * Создаются функции открытия и редактирования картинок добавляемых
  * на страницу
  */
-  var ESC_BUTTON_CODE = 27;
+  var ESC_BUTTON_CODE = window.KEY_CODES.ESCAPE;
   var uploadImage = document.querySelector('#upload-file');
   var imageEditForm = document.querySelector('.img-upload__overlay');
   var imageClose = imageEditForm.querySelector('.img-upload__cancel');
@@ -22,6 +22,7 @@
  * @param {number} evt переменная принимает значение кнопки Esc
  */
   var onPictureEscPress = function (evt) {
+    evt.preventDefault();
     if (evt.keyCode === ESC_BUTTON_CODE) {
       closePictureEdit();
     }
@@ -60,6 +61,7 @@
   var scaleButtonSmaller = document.querySelector('.scale__control--smaller');
   var scalePictureValue = document.querySelector('.scale__control--value');
   var picturePreview = document.querySelector('.img-upload__preview');
+  var percentSign = '%';
   /**
  * Создание обработчика увеличивающео значение размера в %,
  * а также увеличивающего размер изображения с шагом 25%
@@ -68,7 +70,7 @@
     var defaultScaleValue = scalePictureValue.value;
     var defaultPictureSize = parseFloat(defaultScaleValue) / MAX_SCALE_VALUE;
     if (parseFloat(scalePictureValue.value) < MAX_SCALE_VALUE) {
-      scalePictureValue.value = parseFloat(defaultScaleValue) + SCALE_STEP + '%';
+      scalePictureValue.value = parseFloat(defaultScaleValue) + SCALE_STEP + percentSign;
       picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize + SCALE_STEP / MAX_SCALE_VALUE) + ')';
     }
   });
@@ -80,7 +82,7 @@
     var defaultScaleValue = scalePictureValue.value;
     var defaultPictureSize = parseFloat(defaultScaleValue) / MAX_SCALE_VALUE;
     if (parseFloat(scalePictureValue.value) > MIN_SCALE_VALUE) {
-      scalePictureValue.value = parseFloat(defaultScaleValue) - SCALE_STEP + '%';
+      scalePictureValue.value = parseFloat(defaultScaleValue) - SCALE_STEP + percentSign;
       picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize - SCALE_STEP / MAX_SCALE_VALUE) + ')';
     }
   });
