@@ -2,9 +2,8 @@
 (function () {
 /**
  * Создаются функции открытия и редактирования картинок добавляемых
- * на страницу
+ * 4на страницу
  */
-  var ESC_BUTTON_CODE = window.KEY_CODES.ESCAPE;
   var uploadImage = document.querySelector('#upload-file');
   var imageEditForm = document.querySelector('.img-upload__overlay');
   var imageClose = imageEditForm.querySelector('.img-upload__cancel');
@@ -23,7 +22,7 @@
  */
   var onPictureEscPress = function (evt) {
     evt.preventDefault();
-    if (evt.keyCode === ESC_BUTTON_CODE) {
+    if (evt.keyCode === window.utils.KEY_CODES.ESCAPE) {
       closePictureEdit();
     }
   };

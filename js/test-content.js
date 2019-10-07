@@ -28,15 +28,15 @@
       var photo = {};
       photo.url = 'photos/' + i + '.jpg';
       photo.description = 'Картинка №' + i;
-      photo.likes = window.getRandomNum(15, 200);
+      photo.likes = window.utils.getRandomNum(15, 200);
       photo.comments = [];
 
-      for (var j = 0; j < window.getRandomNum(0, 4); j++) {
+      for (var j = 0; j < window.utils.getRandomNum(0, 4); j++) {
         photo.comments.push(
             {
-              avatar: 'img/avatar-' + window.getRandomNum(1, 6) + '.svg',
-              message: COMMENTS_LIST[window.getRandomNum(0, COMMENTS_LIST.length - 1)],
-              name: AUTHOR_NAMES[window.getRandomNum(0, AUTHOR_NAMES.length - 1)]
+              avatar: 'img/avatar-' + window.utils.getRandomNum(1, 6) + '.svg',
+              message: COMMENTS_LIST[window.utils.getRandomNum(0, COMMENTS_LIST.length - 1)],
+              name: AUTHOR_NAMES[window.utils.getRandomNum(0, AUTHOR_NAMES.length - 1)]
             }
         );
       }
