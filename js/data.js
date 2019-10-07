@@ -1,11 +1,10 @@
-
 'use strict';
 window.utils = {};
 window.utils.KEY_CODES = {
   'ESCAPE': 27,
   'ENTER': 13
 };
-
+window.utils.URL = 'https://js.dump.academy/kekstagram/data';
 /**
   * Функция getRandomNum округляет минимальное значение в большую сторону и максимальное  значение в меньшую сторону, возвращает случайное значение в диапазоне от минимального до максимального включительно
   * @param {number} min  минимальное значение диапазаона
