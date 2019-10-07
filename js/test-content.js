@@ -1,12 +1,15 @@
 'use strict';
-(function () {  
+(function () {
 
   var pictureElement = document.querySelector('.pictures');
 
   var templatePictures = document.querySelector('#picture').content.querySelector('.picture');
 
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var errorMessage = errorTemplate.querySelector('.error__title');
   var onError = function (message) {
-    console.error(message);
+    errorMessage.textContent = message;
+    pictureElement.appendChild(errorTemplate);
   };
   var photos = function (photosArray) {
     for (var i = 0; i < photosArray.length; i++) {
