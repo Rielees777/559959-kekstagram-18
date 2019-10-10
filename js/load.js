@@ -1,5 +1,14 @@
 'use strict';
 (function () {
+  /**
+     * Функция load является обработчиком события загрузки данных
+     * с указанного адреса
+     * @param {object} onSuccess это функция обрабатывающая данные
+     * полученные с сервера
+     * @param {object} onError это функция срабатывающая в случае,
+     * когда сервер возвращает статус ошибки
+     * @param {string} URL адрес сервера, откуда беруться данные.
+     */
   window.load = function (onSuccess, onError, URL) {
     var xhr = new XMLHttpRequest();
 
