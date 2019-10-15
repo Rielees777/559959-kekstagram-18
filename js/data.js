@@ -23,6 +23,17 @@
   };
 
   /**
+   * Функция getRandomElement назначает случайный индекс в переменную randomIndex
+   * и через него возвращает случайный объект из массива данных с сервера
+   * @param {Array} items массив из которого берется случайный элемент
+   * @return {object} items[randomIndex] случайный объект из массива данных с сервера
+   */
+  window.getRandomElement = function (items) {
+    var randomIndex = window.utils.getRandomNum(0, items.length - 1);
+    return items[randomIndex];
+  };
+
+  /**
    * Функция debounce выполняет устранение дребезга то есть создается пауза перед выполнением
    * переданной функции
    * @param {object} cb передаваемая функция к которой будет применена задержка

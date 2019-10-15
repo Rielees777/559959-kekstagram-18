@@ -21,8 +21,11 @@
  * @param {number} evt переменная принимает значение кнопки Esc
  */
   var onPictureEscPress = function (evt) {
+
     evt.preventDefault();
+
     if (evt.keyCode === window.utils.KEY_CODES.ESCAPE) {
+
       closePictureEdit();
     }
   };
@@ -31,7 +34,9 @@
  * на нажатие клавиши Esc.
  */
   var openPictureEdit = function () {
+
     imageEditForm.classList.remove('hidden');
+
     document.addEventListener('keydown', onPictureEscPress);
   };
   /**
@@ -39,20 +44,26 @@
  * нажатие на клавишу Esc.
  */
   var closePictureEdit = function () {
+
     imageEditForm.classList.add('hidden');
+
     document.removeEventListener('keydown', onPictureEscPress);
   };
+
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
  */
   uploadImage.addEventListener('change', function () {
+
     openPictureEdit();
   });
+
   /**
  * Создание обработчика закрывающего форму редактирования
  */
   imageClose.addEventListener('click', function () {
+
     closePictureEdit();
   });
 
@@ -61,6 +72,7 @@
   var scalePictureValue = document.querySelector('.scale__control--value');
   var picturePreview = document.querySelector('.img-upload__preview');
   var percentSign = '%';
+
   /**
  * Создание обработчика увеличивающео значение размера в %,
  * а также увеличивающего размер изображения с шагом 25%
@@ -73,6 +85,7 @@
       picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize + SCALE_STEP / MAX_SCALE_VALUE) + ')';
     }
   });
+
   /**
  * Создание обработчика уменьшающего значение размера в %,
  * а также уменьшающего размер изображения с шагом 25%
