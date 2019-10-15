@@ -92,10 +92,10 @@
    * Функция getPopularPhotos делает копию загруженного массива с фото
    * после чего рендерит их через функцию renderPhotos
    */
-  var getPopularPhotos = function () {
+  var getPopularPhotos = window.debounce(function () {
     var popularPhotos = photos.slice();
     renderPhotos(popularPhotos, templatePictures, pictureElement, true);
-  };
+  });
 
   /**
    * Функция getRandomPic назначает случайный индекс в переменную randomIndex
@@ -114,7 +114,7 @@
    * массиве, а также колличество добавленых элементов, после добавляем элемент
    * в массив randomPhotos и далее рендерит его через renderPhotos
    */
-  var getRandomPhotos = function () {
+  var getRandomPhotos = window.debounce(function () {
     var randomPhotos = [];
     photos.forEach(function (randImg) {
       randImg = getRandomPic();
@@ -123,18 +123,18 @@
       }
     });
     renderPhotos(randomPhotos, templatePictures, pictureElement, true);
-  };
+  });
 
   /**
    * Функция getCommentPhotos сортирует массив данных ссервера по
    * количеству комментариев начиная с наибольшего и рендерит их
    * через функцию renderPhotos
    */
-  var getCommentPhotos = function () {
+  var getCommentPhotos = window.debounce(function () {
     var commentedPhotos = photos.slice();
     commentedPhotos.sort(function (current, next) {
       return next.comments.length - current.comments.length;
     });
     renderPhotos(commentedPhotos, templatePictures, pictureElement, true);
-  };
+  });
 })();
