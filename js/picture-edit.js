@@ -114,6 +114,7 @@
       });
     }());
   }
+
   var hashTagsInput = document.querySelector('.text__hashtags');
 
   /**
