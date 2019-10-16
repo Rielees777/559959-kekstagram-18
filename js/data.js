@@ -33,6 +33,14 @@
     return items[randomIndex];
   };
 
+  window.clearChildrens = function (parent, beginElement) {
+    var children = Array.from(parent.children);
+
+    children.slice(beginElement, children.length).forEach(function (child) {
+
+      parent.removeChild(child);
+    });
+  };
   /**
    * Функция debounce выполняет устранение дребезга то есть создается пауза перед выполнением
    * переданной функции
@@ -53,4 +61,28 @@
       }, window.utils.TIMEOUT_INTERVALS.DEBOUNCE_INTERVAL);
     };
   };
+
+  /**
+ * Функция открывает редактор картинки и добавляет обработчик события
+ * на нажатие клавиши Esc.
+ * @param {object} item - DOM элемент у которого убирается класс hidden
+ */
+  window.openPicture = function (item) {
+
+    item.classList.remove('hidden');
+
+    document.addEventListener('keydown', window.onPictureEscPress);
+  };
+  /**
+* Фукция закрывает форму редактирования картинки и удаляет обработчик события
+* нажатие на клавишу Esc.
+* @param {object} item DOM элемент которому добавляется класс hidden
+*/
+  window.closePicture = function (item) {
+
+    item.classList.add('hidden');
+
+    document.removeEventListener('keydown', window.onPictureEscPress);
+  };
+
 })();

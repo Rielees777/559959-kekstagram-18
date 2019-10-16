@@ -20,43 +20,22 @@
  * Функция выполняет закрытие формы редактирования картинки по нажатию клавиши Esc
  * @param {number} evt переменная принимает значение кнопки Esc
  */
-  var onPictureEscPress = function (evt) {
+  window.onPictureEscPress = function (evt) {
 
     evt.preventDefault();
 
     if (evt.keyCode === window.utils.KEY_CODES.ESCAPE) {
 
-      closePictureEdit();
+      window.closePicture(imageEditForm);
     }
   };
-  /**
- * Функция открывает редактор картинки и добавляет обработчик события
- * на нажатие клавиши Esc.
- */
-  var openPictureEdit = function () {
-
-    imageEditForm.classList.remove('hidden');
-
-    document.addEventListener('keydown', onPictureEscPress);
-  };
-  /**
- * Фукция закрывает форму редактирования картинки и удаляет обработчик события
- * нажатие на клавишу Esc.
- */
-  var closePictureEdit = function () {
-
-    imageEditForm.classList.add('hidden');
-
-    document.removeEventListener('keydown', onPictureEscPress);
-  };
-
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
  */
   uploadImage.addEventListener('change', function () {
 
-    openPictureEdit();
+    window.openPicture(imageEditForm);
   });
 
   /**
@@ -64,7 +43,7 @@
  */
   imageClose.addEventListener('click', function () {
 
-    closePictureEdit();
+    window.closePicture(imageEditForm);
   });
 
   var scaleButtonBigger = document.querySelector('.scale__control--bigger');

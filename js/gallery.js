@@ -20,12 +20,6 @@
 
   var filtersButton = imageFilterForm.querySelectorAll('.img-filters__button');
 
-  var bigPicture = document.querySelector('.big-picture');
-
-  var commentsList = document.querySelector('.social__comments');
-
-  var templateComment = commentsList.querySelector('.social__comment');
-
   /**
     * Функция getPhotosArray отрисовывает на странице  все элементы полученные из массива
     * @param {array} photosArray переменная через которую происходит взаимодействие с каждым элементом
@@ -38,12 +32,7 @@
 
     if (clearNode) {
 
-      var children = Array.from(pictureElement.children);
-
-      children.slice(2, children.length).forEach(function (child) {
-
-        pictureElement.removeChild(child);
-      });
+      window.clearChildrens(parent, 2);
     }
 
     for (var i = 0; i < photosArray.length; i++) {
@@ -56,28 +45,6 @@
 
       parent.appendChild(newPicture);
     }
-
-    /**
-     * Рендерится большая картинка превью со всеми элементами
-     */
-    bigPicture.querySelector('.big-picture__img img').setAttribute('src', photosArray[0].url);
-    bigPicture.querySelector('.likes-count').textContent = photosArray[0].likes;
-    bigPicture.querySelector('.comments-count').textContent = photosArray[0].comments.length;
-
-    for (var k = 0; k < photosArray[0].comments.length; k++) {
-
-      var newComment = templateComment.cloneNode(true);
-
-      newComment.querySelector('.social__comment img').setAttribute('src', photosArray[0].comments[k].avatar);
-      newComment.querySelector('.social__comment img').setAttribute('alt', photosArray[0].comments[k].name);
-      newComment.querySelector('.social__text').textContent = photosArray[0].comments[k].message;
-
-      commentsList.appendChild(newComment);
-    }
-
-    bigPicture.querySelector('.social__caption').textContent = photosArray[0].description;
-    bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
-    bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
   };
 
   var photos = [];
@@ -85,7 +52,7 @@
   var successHandler = function (data) {
 
     photos = data;
-
+    window.pictures = photos;
     renderPhotos(photos, templatePictures, pictureElement, true);
   };
   /**
@@ -167,11 +134,11 @@
 
       var randomPic = window.getRandomElement(photos);
 
-      if (!randomPhotos.includes(randomPic)) {
+      if (!randomPhotos.includes(randomPic) && randomPhotos.length < 10) {
 
         randomPhotos.push(randomPic);
 
-      } else if (randomPhotos.length < 10) {
+      } else if (randomPhotos.length >= 10) {
 
         break;
       }
