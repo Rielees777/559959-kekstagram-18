@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var pictureElement = document.querySelector('.pictures');
 
   var bigPicture = document.querySelector('.big-picture');
 
@@ -9,7 +10,7 @@
 
   var templateComment = commentsList.querySelector('.social__comment');
 
-  document.addEventListener('click', function (evt) {
+  pictureElement.addEventListener('click', function (evt) {
 
     window.clearChildrens(commentsList, 0);
 
@@ -44,25 +45,11 @@
   });
 
   /**
- * Функция выполняет закрытие формы редактирования картинки по нажатию клавиши Esc
- * @param {number} evt переменная принимает значение кнопки Esc
- */
-
-  window.onPictureEscPress = function (evt) {
-
-    evt.preventDefault();
-
-    if (evt.keyCode === window.utils.KEY_CODES.ESCAPE) {
-
-      window.closePicture(bigPicture);
-    }
-  };
-
-  /**
  * Создание обработчика закрывающего форму редактирования
  */
   closePreviewButton.addEventListener('click', function () {
 
     window.closePicture(bigPicture);
   });
+
 })();

@@ -2,12 +2,15 @@
 (function () {
 /**
  * Создаются функции открытия и редактирования картинок добавляемых
- * 4на страницу
+ * на страницу
  */
   var uploadImage = document.querySelector('#upload-file');
   var imageEditForm = document.querySelector('.img-upload__overlay');
   var imageClose = imageEditForm.querySelector('.img-upload__cancel');
 
+  var effectsList = document.querySelectorAll('.effects__radio');
+  var hashTagsInput = document.querySelector('.text__hashtags');
+  var commentTextInput = document.querySelector('.text__description');
   /**
  * Консианты, максимальное и иминимальное значения размера картинки
  * а также шаг изменения размера.
@@ -16,19 +19,6 @@
   var MAX_SCALE_VALUE = 100;
   var SCALE_STEP = 25;
 
-  /**
- * Функция выполняет закрытие формы редактирования картинки по нажатию клавиши Esc
- * @param {number} evt переменная принимает значение кнопки Esc
- */
-  window.onPictureEscPress = function (evt) {
-
-    evt.preventDefault();
-
-    if (evt.keyCode === window.utils.KEY_CODES.ESCAPE) {
-
-      window.closePicture(imageEditForm);
-    }
-  };
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
@@ -78,7 +68,6 @@
     }
   });
 
-  var effectsList = document.querySelectorAll('.effects__radio');
   var effectsArray = ['None', 'grayscale(0.9)', 'sepia(0.9)', 'invert(100%)', 'blur(3px)', 'brightness(2)'];
 
   /**
@@ -94,12 +83,11 @@
     }());
   }
 
-  var hashTagsInput = document.querySelector('.text__hashtags');
-
   /**
  * Создание обработчика реагирующего на неправильное заполнение
  * поля с хэштегами
  */
+
   hashTagsInput.addEventListener('input', function () {
     var hashTagsArray = hashTagsInput.value.split(' ');
     if (hashTagsArray.length > 5) {
@@ -111,6 +99,13 @@
       if (hashTagsArray[i][0] !== '#') {
         hashTagsInput.setCustomValidity('Хэштег должен начинаться с символа #');
       }
+    }
+  });
+  commentTextInput.addEventListener('input', function () {
+    if (commentTextInput.value.length > 140) {
+      commentTextInput.setCustomValidity('Длина комментария превышает максимально допустимую в 140 символов');
+    } else {
+      commentTextInput.setCustomValidity('');
     }
   });
 })();

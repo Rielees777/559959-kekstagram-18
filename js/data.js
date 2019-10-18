@@ -8,6 +8,7 @@
   window.utils.TIMEOUT_INTERVALS = {
     DEBOUNCE_INTERVAL: 500
   };
+
   window.utils.URL = 'https://js.dump.academy/kekstagram/data';
   /**
   * Функция getRandomNum округляет минимальное значение в большую сторону и максимальное  значение в меньшую сторону, возвращает случайное значение в диапазоне от минимального до максимального включительно
@@ -63,6 +64,19 @@
   };
 
   /**
+ * Функция выполняет закрытие формы редактирования картинки по нажатию клавиши Esc
+ * @param {number} evt переменная принимает значение кнопки Esc
+ * @param {object} item элемент к оторому применяется внутренняя функция
+ */
+  window.onPictureEscPress = function (evt, item) {
+
+    if (evt.keyCode === window.utils.KEY_CODES.ESCAPE) {
+
+      window.closePicture(item);
+    }
+  };
+
+  /**
  * Функция открывает редактор картинки и добавляет обработчик события
  * на нажатие клавиши Esc.
  * @param {object} item - DOM элемент у которого убирается класс hidden
@@ -71,7 +85,10 @@
 
     item.classList.remove('hidden');
 
-    document.addEventListener('keydown', window.onPictureEscPress);
+    document.addEventListener('keydown', function (evt) {
+
+      window.onPictureEscPress(evt, item);
+    });
   };
   /**
 * Фукция закрывает форму редактирования картинки и удаляет обработчик события
@@ -82,7 +99,10 @@
 
     item.classList.add('hidden');
 
-    document.removeEventListener('keydown', window.onPictureEscPress);
+    document.removeEventListener('keydown', function (evt) {
+
+      window.onPictureEscPress(evt, item);
+    });
   };
 
 })();
