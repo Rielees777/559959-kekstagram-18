@@ -24,16 +24,14 @@
  * загрузки изображения
  */
   uploadImage.addEventListener('change', function () {
-
-    window.utils.openPicture(imageEditForm);
+    window.popup.openPicture(imageEditForm);
   });
 
   /**
  * Создание обработчика закрывающего форму редактирования
  */
   imageClose.addEventListener('click', function () {
-
-    window.utils.closePicture(imageEditForm);
+    window.popup.closePicture(imageEditForm);
   });
 
   var scaleButtonBigger = document.querySelector('.scale__control--bigger');

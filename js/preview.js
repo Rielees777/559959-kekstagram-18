@@ -17,7 +17,7 @@
         continue;
       } else if (srcAttribute.indexOf(window.pictures[i].url) !== -1) {
 
-        window.utils.openPicture(bigPicture);
+        window.popup.openPicture(bigPicture);
 
         bigPicture.querySelector('.big-picture__img img').setAttribute('src', window.pictures[i].url);
         bigPicture.querySelector('.likes-count').textContent = window.pictures[i].likes;
@@ -45,7 +45,7 @@
  */
   closePreviewButton.addEventListener('click', function () {
 
-    window.utils.closePicture(bigPicture);
+    window.popup.closePicture(bigPicture);
   });
 
 })();

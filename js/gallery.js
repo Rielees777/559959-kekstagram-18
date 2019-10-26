@@ -24,12 +24,10 @@
     */
   var renderPhotos = function (photosArray, template, parent, clearNode) {
     if (clearNode) {
-
       window.utils.clearChildrens(parent, 2);
     }
 
     for (var i = 0; i < photosArray.length; i++) {
-
       var newPicture = template.cloneNode(true);
 
       newPicture.querySelector('.picture__img').src = photosArray[i].url;
@@ -45,6 +43,7 @@
   var successHandler = function (data) {
     photos = data;
     window.pictures = photos;
+
     renderPhotos(photos, templatePictures, pictureElement, true);
   };
   /**
@@ -70,30 +69,23 @@
     evt.preventDefault();
 
     filtersButton.forEach(function (item) {
-
       item.classList.remove('img-filters__button--active');
     });
 
     var target = evt.target;
-
+    var id = target.id;
     target.classList.add('img-filters__button--active');
 
-    var id = target.id;
-
     switch (id) {
-
       case 'filter-popular':
-
         getPopularPhotos();
         break;
 
       case 'filter-random':
-
         getRandomPhotos();
         break;
 
       case 'filter-discussed':
-
         getCommentPhotos();
         break;
     }
@@ -119,15 +111,12 @@
     var randomPhotos = [];
 
     for (var j = 0; j < photos.length; j++) {
-
-      var randomPic = window.getRandomElement(photos);
+      var randomPic = window.utils.getRandomElement(photos);
 
       if (!randomPhotos.includes(randomPic) && randomPhotos.length < 10) {
-
         randomPhotos.push(randomPic);
 
       } else if (randomPhotos.length >= 10) {
-
         break;
       }
     }
