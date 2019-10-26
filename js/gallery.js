@@ -1,23 +1,17 @@
 'use strict';
 (function () {
-
   var pictureElement = document.querySelector('.pictures');
-
   var templatePictures = document.querySelector('#picture').content.querySelector('.picture');
-
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var errorTitleElement = errorTemplate.querySelector('.error__title');
-
   var imgFilters = document.querySelector('.img-filters');
 
   window.addEventListener('load', function () {
-
     imgFilters.classList.remove('img-filters--inactive');
   });
 
   var imageFilterForm = imgFilters.querySelector('.img-filters__form');
-
   var filtersButton = imageFilterForm.querySelectorAll('.img-filters__button');
 
   /**
@@ -29,10 +23,9 @@
     * @param {boolean} clearNode параметр запускающий очистку узла
     */
   var renderPhotos = function (photosArray, template, parent, clearNode) {
-
     if (clearNode) {
 
-      window.clearChildrens(parent, 2);
+      window.utils.clearChildrens(parent, 2);
     }
 
     for (var i = 0; i < photosArray.length; i++) {
@@ -50,7 +43,6 @@
   var photos = [];
 
   var successHandler = function (data) {
-
     photos = data;
     window.pictures = photos;
     renderPhotos(photos, templatePictures, pictureElement, true);
@@ -61,13 +53,12 @@
    * о вызваной ошибке
    */
   var onErrorResponse = function (message) {
-
     errorTitleElement.textContent = message;
 
     pictureElement.appendChild(errorTemplate);
   };
 
-  window.load(successHandler, onErrorResponse, window.utils.URL);
+  window.load(successHandler, onErrorResponse);
 
   /**
    * Функция обработчик события срабатывающего на форме imageFilterForm
@@ -76,7 +67,6 @@
    * @param {object} evt объект текущего события
    */
   imageFilterForm.addEventListener('click', function (evt) {
-
     evt.preventDefault();
 
     filtersButton.forEach(function (item) {
@@ -112,8 +102,7 @@
    * Функция getPopularPhotos делает копию загруженного массива с фото
    * после чего рендерит их через функцию renderPhotos
    */
-  var getPopularPhotos = window.debounce(function () {
-
+  var getPopularPhotos = window.utils.debounce(function () {
     var popularPhotos = photos.slice();
 
     renderPhotos(popularPhotos, templatePictures, pictureElement, true);
@@ -126,8 +115,7 @@
    * массиве, а также колличество добавленых элементов, после добавляем элемент
    * в массив randomPhotos и далее рендерит его через renderPhotos
    */
-  var getRandomPhotos = window.debounce(function () {
-
+  var getRandomPhotos = window.utils.debounce(function () {
     var randomPhotos = [];
 
     for (var j = 0; j < photos.length; j++) {
@@ -152,12 +140,10 @@
    * количеству комментариев начиная с наибольшего и рендерит их
    * через функцию renderPhotos
    */
-  var getCommentPhotos = window.debounce(function () {
-
+  var getCommentPhotos = window.utils.debounce(function () {
     var commentedPhotos = photos.slice();
 
     commentedPhotos.sort(function (current, next) {
-
       return next.comments.length - current.comments.length;
 
     });

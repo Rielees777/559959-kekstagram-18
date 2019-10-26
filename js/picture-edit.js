@@ -25,7 +25,7 @@
  */
   uploadImage.addEventListener('change', function () {
 
-    window.openPicture(imageEditForm);
+    window.utils.openPicture(imageEditForm);
   });
 
   /**
@@ -33,7 +33,7 @@
  */
   imageClose.addEventListener('click', function () {
 
-    window.closePicture(imageEditForm);
+    window.utils.closePicture(imageEditForm);
   });
 
   var scaleButtonBigger = document.querySelector('.scale__control--bigger');

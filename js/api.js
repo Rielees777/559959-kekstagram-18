@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var URL = 'https://js.dump.academy/kekstagram/data';
   /**
      * Функция load является обработчиком события загрузки данных
      * с указанного адреса
@@ -9,7 +10,7 @@
      * когда сервер возвращает статус ошибки
      * @param {string} URL адрес сервера, откуда беруться данные.
      */
-  window.load = function (onSuccess, onError, URL) {
+  window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
