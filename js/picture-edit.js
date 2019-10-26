@@ -19,6 +19,8 @@
   var MAX_SCALE_VALUE = 100;
   var SCALE_STEP = 25;
 
+  var PIN_SCALE_MAX_VALUE = 455;
+  var PIN_SCALE_MIN_VALUE = 0;
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
@@ -105,5 +107,46 @@
     } else {
       commentTextInput.setCustomValidity('');
     }
+  });
+
+  var pinElement = document.querySelector('.effect-level__pin');
+  var effectDepth = document.querySelector('.effect-level__depth');
+
+  pinElement.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX
+    };
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+      startCoords = {
+        x: moveEvt.clientX
+      };
+
+      pinElement.style.left = (pinElement.offsetLeft - shift.x) + 'px';
+      effectDepth.style.width = (pinElement.offsetLeft - shift.x) + 'px';
+      console.log(pinElement.style.left);
+      if (pinElement.offsetLeft > PIN_SCALE_MAX_VALUE) {
+        pinElement.style.left = PIN_SCALE_MAX_VALUE + 'px';
+
+      } else if (pinElement.offsetLeft < PIN_SCALE_MIN_VALUE) {
+        pinElement.style.left = PIN_SCALE_MIN_VALUE + 'px';
+      }
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      pinElement.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    pinElement.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 })();
