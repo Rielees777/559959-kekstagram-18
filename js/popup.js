@@ -32,9 +32,7 @@
   var closePicture = function (item) {
     item.classList.add('hidden');
 
-    document.removeEventListener('keydown', function (evt) {
-      onPictureEscPress(evt, item);
-    });
+    document.removeEventListener('keydown', onPictureEscPress);
   };
   window.popup = {
     onPictureEscPress: onPictureEscPress,

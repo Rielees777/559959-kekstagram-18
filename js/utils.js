@@ -24,7 +24,7 @@
     return items[randomIndex];
   };
 
-  var clearChildrens = function (parent, beginElement) {
+  var clearNode = function (parent, beginElement) {
     var children = Array.from(parent.children);
 
     children.slice(beginElement, children.length).forEach(function (child) {
@@ -55,7 +55,7 @@
   window.utils = {
     getRandomNum: getRandomNum,
     getRandomElement: getRandomElement,
-    clearChildrens: clearChildrens,
+    clearNode: clearNode,
     debounce: debounce,
   };
 

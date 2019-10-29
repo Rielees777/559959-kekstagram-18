@@ -8,15 +8,16 @@
   var templateComment = commentsList.querySelector('.social__comment');
 
   pictureElement.addEventListener('click', function (evt) {
-    window.utils.clearChildrens(commentsList, 0);
+    window.utils.clearNode(commentsList, 0);
 
     var srcAttribute = evt.target.src;
 
     for (var i = 0; i < window.pictures.length; i++) {
+      var pictureUrl = srcAttribute.indexOf(window.pictures[i].url) !== -1;
+
       if (!srcAttribute) {
         continue;
-      } else if (srcAttribute.indexOf(window.pictures[i].url) !== -1) {
-
+      } else if (pictureUrl) {
         window.popup.openPicture(bigPicture);
 
         bigPicture.querySelector('.big-picture__img img').setAttribute('src', window.pictures[i].url);
@@ -24,7 +25,6 @@
         bigPicture.querySelector('.comments-count').textContent = window.pictures[i].comments.length;
 
         for (var k = 0; k < window.pictures[i].comments.length; k++) {
-
           var newComment = templateComment.cloneNode(true);
 
           newComment.querySelector('.social__comment img').setAttribute('src', window.pictures[i].comments[k].avatar);
@@ -44,7 +44,6 @@
  * Создание обработчика закрывающего форму редактирования
  */
   closePreviewButton.addEventListener('click', function () {
-
     window.popup.closePicture(bigPicture);
   });
 

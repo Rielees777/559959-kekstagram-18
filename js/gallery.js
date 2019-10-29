@@ -20,11 +20,11 @@
     * массива
     * @param {object} template объект шаблон для вставки картинки
     * @param {object} parent объект куда вставляются картинки
-    * @param {boolean} clearNode параметр запускающий очистку узла
+    * @param {boolean} clearDOMElements параметр запускающий очистку узла
     */
-  var renderPhotos = function (photosArray, template, parent, clearNode) {
-    if (clearNode) {
-      window.utils.clearChildrens(parent, 2);
+  var renderPhotos = function (photosArray, template, parent, clearDOMElements) {
+    if (clearDOMElements) {
+      window.utils.clearNode(parent, 2);
     }
 
     for (var i = 0; i < photosArray.length; i++) {
