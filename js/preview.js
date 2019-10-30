@@ -15,9 +15,16 @@
     if (!srcAttribute) {
       return;
     }
+    renderPicturePreview(srcAttribute);
+  });
 
+  /**
+   * Функция выполняет рендеринг картинки в попапе
+   * @param {sting} pictureSrc параметр в который записывается текущий src картинки
+   */
+  var renderPicturePreview = function (pictureSrc) {
     for (var i = 0; i < window.pictures.length; i++) {
-      var pictureUrl = srcAttribute.indexOf(window.pictures[i].url) !== -1;
+      var pictureUrl = pictureSrc.indexOf(window.pictures[i].url) !== -1;
 
       if (pictureUrl) {
         window.popup.globalElement = bigPicture;
@@ -41,8 +48,7 @@
         bigPicture.querySelector('.comments-loader').classList.add('visually-hidden');
       }
     }
-  });
-
+  };
   /**
  * Создание обработчика закрывающего форму редактирования
  */

@@ -18,8 +18,8 @@
     * Функция getPhotosArray отрисовывает на странице  все элементы полученные из массива
     * @param {array} photosArray переменная через которую происходит взаимодействие с каждым элементом
     * массива
-    * @param {object} template объект шаблон для вставки картинки
-    * @param {object} parent объект куда вставляются картинки
+    * @param {HTMLElement} template объект шаблон для вставки картинки
+    * @param {HTMLElement} parent объект куда вставляются картинки
     * @param {boolean} clearDOMElements параметр запускающий очистку узла
     */
   var renderPhotos = function (photosArray, template, parent, clearDOMElements) {
