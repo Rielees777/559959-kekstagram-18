@@ -26,14 +26,15 @@
  * загрузки изображения
  */
   uploadImage.addEventListener('change', function () {
-    window.popup.openPicture(imageEditForm);
+    window.popup.globalElement = imageEditForm;
+    window.popup.openPicture();
   });
 
   /**
  * Создание обработчика закрывающего форму редактирования
  */
   imageClose.addEventListener('click', function () {
-    window.popup.closePicture(imageEditForm);
+    window.popup.closePicture();
   });
 
   var scaleButtonBigger = document.querySelector('.scale__control--bigger');
@@ -110,20 +111,20 @@
   var getEffect = function (effectStyle, effectValue) {
     picturePreview.style.filter = effectStyle + effectValue;
   };
-  effectsChooser.addEventListener('input', function (item) {
-    item.preventDefault();
-    var effect = item.target.value;
-    console.log('1');
+  effectsChooser.addEventListener('input', function (chooseEvt) {
+    chooseEvt.preventDefault();
+
+    var effect = chooseEvt.target.value;
     effectDepthLine.classList.remove('hidden');
+
     pinElement.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
-      console.log('2');
+
       var startCoords = {
         x: evt.clientX
       };
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
-        console.log('3');
         var shift = {
           x: startCoords.x - moveEvt.clientX
         };
@@ -165,11 +166,11 @@
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
 
-        pinElement.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
       };
 
-      pinElement.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     });
 

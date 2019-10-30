@@ -12,13 +12,16 @@
 
     var srcAttribute = evt.target.src;
 
+    if (!srcAttribute) {
+      return;
+    }
+
     for (var i = 0; i < window.pictures.length; i++) {
       var pictureUrl = srcAttribute.indexOf(window.pictures[i].url) !== -1;
 
-      if (!srcAttribute) {
-        continue;
-      } else if (pictureUrl) {
-        window.popup.openPicture(bigPicture);
+      if (pictureUrl) {
+        window.popup.globalElement = bigPicture;
+        window.popup.openPicture();
 
         bigPicture.querySelector('.big-picture__img img').setAttribute('src', window.pictures[i].url);
         bigPicture.querySelector('.likes-count').textContent = window.pictures[i].likes;
@@ -44,7 +47,7 @@
  * Создание обработчика закрывающего форму редактирования
  */
   closePreviewButton.addEventListener('click', function () {
-    window.popup.closePicture(bigPicture);
+    window.popup.closePicture();
   });
 
 })();
