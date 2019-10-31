@@ -11,6 +11,13 @@
   var effectsChooser = document.querySelector('.img-upload__effects');
   var hashTagsInput = document.querySelector('.text__hashtags');
   var commentTextInput = document.querySelector('.text__description');
+
+  var scaleButtonBigger = document.querySelector('.scale__control--bigger');
+  var scaleButtonSmaller = document.querySelector('.scale__control--smaller');
+  var scalePictureValue = document.querySelector('.scale__control--value');
+  var picturePreview = document.querySelector('.img-upload__preview img');
+  var percentSign = '%';
+
   /**
  * Консианты, максимальное и иминимальное значения размера картинки
  * а также шаг изменения размера.
@@ -27,7 +34,12 @@
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
  */
-  uploadImage.addEventListener('change', function () {
+  uploadImage.addEventListener('change', function (evt) {
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      picturePreview.src = reader.result;
+    });
+    reader.readAsDataURL(evt.target.files[0]);
     window.popup.globalElement = imageEditForm;
     window.popup.openPicture();
   });
@@ -38,12 +50,6 @@
   imageClose.addEventListener('click', function () {
     window.popup.closePicture();
   });
-
-  var scaleButtonBigger = document.querySelector('.scale__control--bigger');
-  var scaleButtonSmaller = document.querySelector('.scale__control--smaller');
-  var scalePictureValue = document.querySelector('.scale__control--value');
-  var picturePreview = document.querySelector('.img-upload__preview');
-  var percentSign = '%';
 
   /**
  * Создание обработчика увеличивающео значение размера в %,
@@ -70,12 +76,6 @@
       picturePreview.style.transform = 'scale(' + parseFloat(defaultPictureSize - SCALE_STEP / MAX_SCALE_VALUE) + ')';
     }
   });
-
-  /**
- * Создание функции обрабатывающей событие реагирующее на выбор effects__radio
- * назначение эффекта текущей картинке.
- */
-
 
   /**
  * Создание обработчика реагирующего на неправильное заполнение
@@ -129,6 +129,7 @@
     pinElement.style.left = PIN_DEFAULT_POSITION + 'px';
     effectDepth.style.width = PIN_DEFAULT_POSITION + 'px';
     pinElement.value = PIN_DEFAULT_VALUE;
+    picturePreview.style.filter = 'none';
 
     if (effect === 'none') {
       picturePreview.style.filter = 'none';
