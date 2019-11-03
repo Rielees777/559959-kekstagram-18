@@ -57,7 +57,7 @@
     pictureElement.appendChild(errorTemplate);
   };
 
-  window.load(successHandler, onErrorResponse);
+  window.api.load(successHandler, onErrorResponse);
 
   /**
    * Функция обработчик события срабатывающего на форме imageFilterForm

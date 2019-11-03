@@ -18,6 +18,10 @@
   var picturePreview = document.querySelector('.img-upload__preview img');
   var percentSign = '%';
 
+  var uploadForm = document.querySelector('.img-upload__form');
+  var successTemaplate = document.querySelector('#success').content.querySelector('.success');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var errorTitleElement = errorTemplate.querySelector('.error__title');
   /**
  * Консианты, максимальное и иминимальное значения размера картинки
  * а также шаг изменения размера.
@@ -30,18 +34,47 @@
   var PIN_SCALE_MIN_VALUE = 0;
   var PIN_DEFAULT_POSITION = 91;
   var PIN_DEFAULT_VALUE = 20;
+
+  var onSuccessMessageEscPress = function (evt) {
+    if (evt.keyCode === window.constants.keyCode.ESC) {
+      closeSuccessMessage();
+    }
+  };
+  var closeSuccessMessage = function () {
+    document.querySelector('main').removeChild(successTemaplate);
+  };
+
+  var showSuccesMessage = function () {
+    document.querySelector('main').appendChild(successTemaplate);
+    window.popup.closePicture();
+  };
+  var showErrorMessage = function (message) {
+    window.popup.closePicture();
+    errorTitleElement.textContent = message;
+    document.querySelector('main').appendChild(errorTemplate);
+  };
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
  */
   uploadImage.addEventListener('change', function (evt) {
+    evt.preventDefault();
     var reader = new FileReader();
+
     reader.addEventListener('load', function () {
       picturePreview.src = reader.result;
     });
+
     reader.readAsDataURL(evt.target.files[0]);
     window.popup.globalElement = imageEditForm;
     window.popup.openPicture();
+  });
+
+  uploadForm.addEventListener('submit', function (uploadEvt) {
+    window.api.upload(new FormData(uploadForm), showSuccesMessage, showErrorMessage);
+    uploadEvt.preventDefault();
+    document.addEventListener('click', closeSuccessMessage);
+    document.addEventListener('keydown', onSuccessMessageEscPress);
   });
 
   /**
@@ -114,8 +147,9 @@
   };
 
   var pinElement = document.querySelector('.effect-level__pin');
-  var effectDepth = document.querySelector('.effect-level__depth');
-  var effectDepthLine = document.querySelector('.effect-level');
+  var effectDepthLine = document.querySelector('.effect-level__depth');
+  var effectDepth = document.querySelector('.effect-level');
+  var effectDepthValue = effectDepth.querySelector('.effect-level__value');
 
   var getEffect = function (effectStyle, effectValue) {
     picturePreview.style.filter = effectStyle + effectValue;
@@ -127,17 +161,17 @@
 
     effect = chooseEvt.target.value;
     pinElement.style.left = PIN_DEFAULT_POSITION + 'px';
-    effectDepth.style.width = PIN_DEFAULT_POSITION + 'px';
+    effectDepthLine.style.width = PIN_DEFAULT_POSITION + 'px';
     pinElement.value = PIN_DEFAULT_VALUE;
     picturePreview.style.filter = 'none';
 
     if (effect === 'none') {
       picturePreview.style.filter = 'none';
-      effectDepthLine.classList.add('hidden');
+      effectDepth.classList.add('hidden');
       return;
     }
 
-    effectDepthLine.classList.remove('hidden');
+    effectDepth.classList.remove('hidden');
   });
 
   pinElement.addEventListener('mousedown', function (evt) {
@@ -159,7 +193,7 @@
       };
 
       pinElement.style.left = (pinElement.offsetLeft - shift.x) + 'px';
-      effectDepth.style.width = (pinElement.offsetLeft - shift.x) + 'px';
+      effectDepthLine.style.width = (pinElement.offsetLeft - shift.x) + 'px';
 
       if (pinElement.offsetLeft > PIN_SCALE_MAX_VALUE) {
         pinElement.style.left = PIN_SCALE_MAX_VALUE + 'px';
@@ -167,23 +201,22 @@
         pinElement.style.left = PIN_SCALE_MIN_VALUE + 'px';
       }
 
-      pinElement.value = Math.round(pinElement.offsetLeft / PIN_SCALE_MAX_VALUE * 100);
-
+      effectDepthValue.value = Math.round(pinElement.offsetLeft / PIN_SCALE_MAX_VALUE * 100);
       switch (effect) {
         case 'chrome':
-          getEffect(effectsList.chrome, '(' + pinElement.value / 100 + ')');
+          getEffect(effectsList.chrome, '(' + effectDepthValue.value / 100 + ')');
           break;
         case 'sepia':
-          getEffect(effectsList.sepia, '(' + pinElement.value / 100 + ')');
+          getEffect(effectsList.sepia, '(' + effectDepthValue.value / 100 + ')');
           break;
         case 'marvin':
-          getEffect(effectsList.marvin, '(' + pinElement.value + '%)');
+          getEffect(effectsList.marvin, '(' + effectDepthValue.value + '%)');
           break;
         case 'phobos':
-          getEffect(effectsList.phobos, '(' + pinElement.value / 100 * 3 + 'px)');
+          getEffect(effectsList.phobos, '(' + effectDepthValue.value / 100 * 3 + 'px)');
           break;
         case 'heat':
-          getEffect(effectsList.heat, '(' + pinElement.value / 100 * 2 + ')');
+          getEffect(effectsList.heat, '(' + effectDepthValue.value / 100 * 2 + ')');
           break;
       }
     };

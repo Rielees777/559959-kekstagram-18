@@ -1,6 +1,42 @@
 'use strict';
 (function () {
-  var URL = 'https://js.dump.academy/kekstagram/data';
+  var LOAD_URL = 'https://js.dump.academy/kekstagram/data';
+  var UPLOAD_URL = 'https://js.dump.academy/kekstagram';
+
+  var requestHandler = function (request, onSuccess, onError) {
+    request.responseType = 'json';
+
+    request.addEventListener('load', function () {
+      switch (request.status) {
+        case 200:
+          onSuccess(request.response);
+          break;
+
+        default:
+          var error = 'Cтатус ответа: : ' + request.status + ' ' + request.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
+    });
+    request.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    request.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + request.timeout + 'мс');
+    });
+    request.timeout = 10000;
+  };
+
+  var upload = function (data, onSuccess, onError) {
+    var xhr = new XMLHttpRequest();
+    requestHandler(xhr, onSuccess, onError);
+
+    xhr.open('POST', UPLOAD_URL);
+    xhr.send(data);
+  };
   /**
      * Функция load является обработчиком события загрузки данных
      * с указанного адреса
@@ -10,37 +46,16 @@
      * когда сервер возвращает статус ошибки
      * @param {string} URL адрес сервера, откуда беруться данные.
      */
-  window.load = function (onSuccess, onError) {
+  var load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
+    requestHandler(xhr, onSuccess, onError);
 
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      var error;
-      switch (xhr.status) {
-        case 200:
-          onSuccess(xhr.response);
-          break;
-
-        default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        onError(error);
-      }
-    });
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-    });
-    xhr.timeout = 10000;
-    xhr.open('GET', URL);
-
+    xhr.open('GET', LOAD_URL);
     xhr.send();
+  };
+  window.api = {
+    load: load,
+    upload: upload
   };
 })();
 
