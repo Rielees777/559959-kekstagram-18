@@ -40,7 +40,7 @@
 
   var photos = [];
 
-  var successHandler = function (data) {
+  var onSuccessHandler = function (data) {
     photos = data;
     window.pictures = photos;
 
@@ -57,7 +57,7 @@
     pictureElement.appendChild(errorTemplate);
   };
 
-  window.api.load(successHandler, onErrorResponse);
+  window.api.requestHandler('GET', onSuccessHandler, onErrorResponse, window.api.LOAD_URL);
 
   /**
    * Функция обработчик события срабатывающего на форме imageFilterForm

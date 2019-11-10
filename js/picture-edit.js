@@ -42,6 +42,8 @@
   };
   var closeSuccessMessage = function () {
     document.querySelector('main').removeChild(successTemaplate);
+    document.removeEventListener('click', closeSuccessMessage);
+    document.removeEventListener('keydown', onSuccessMessageEscPress);
   };
 
   var showSuccesMessage = function () {
@@ -70,9 +72,10 @@
     window.popup.openPicture();
   });
 
-  uploadForm.addEventListener('submit', function (uploadEvt) {
-    window.api.upload(new FormData(uploadForm), showSuccesMessage, showErrorMessage);
-    uploadEvt.preventDefault();
+  uploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.api.requestHandler('POST', showSuccesMessage, showErrorMessage, window.api.UPLOAD_URL, new FormData(uploadForm));
+
     document.addEventListener('click', closeSuccessMessage);
     document.addEventListener('keydown', onSuccessMessageEscPress);
   });

@@ -18,25 +18,30 @@
       return;
     }
     renderPicturePreview(srcAttribute);
-    var commentsArray = Array.from(commentsList.querySelectorAll('.social__comment'));
-    var commentsCounter = bigPicture.querySelector('.comments-count').textContent;
-    if (commentsCounter > commentsFilterCounter) {
+    var firstCommetns = Array.from(commentsList.querySelectorAll('.social__comment'));
+    commentsFilterCounter = 4;
+    if (firstCommetns.length > commentsFilterCounter) {
       commentLoader.classList.remove('hidden');
-      commentsArray.map(hiddinComments);
+      firstCommetns.map(hiddinComments);
     }
-    commentLoader.addEventListener('click', function () {
-      commentsFilterCounter = commentsFilterCounter + 5;
-      commentsArray.map(showComments);
-    });
+  });
+  commentLoader.addEventListener('click', function () {
+    var secondComments = Array.from(commentsList.querySelectorAll('.social__comment'));
+    commentsFilterCounter = commentsFilterCounter + 5;
+    secondComments.map(showComments);
+
+    if (commentsFilterCounter >= secondComments.length) {
+      commentLoader.classList.add('hidden');
+    }
   });
   var hiddinComments = function (item, index) {
     if (index > commentsFilterCounter) {
-      item.classList.add('visually-hidden');
+      item.classList.add('hidden');
     }
   };
-  var showComments = function (item1, index1) {
-    if (index1 < commentsFilterCounter) {
-      item1.classList.remove('visually-hidden');
+  var showComments = function (item, index) {
+    if (index < commentsFilterCounter) {
+      item.classList.remove('hidden');
     }
   };
   /**
@@ -78,7 +83,6 @@
  * Создание обработчика закрывающего форму редактирования
  */
   closePreviewButton.addEventListener('click', function () {
-    commentsFilterCounter = 4;
     window.popup.closePicture();
   });
 
