@@ -40,12 +40,17 @@
 
   var photos = [];
 
+  /**
+   * Функция принимает массив картинок и рендерит их на странице.
+   * @param {Array} data параметр через который передается массив картинок.
+   */
   var onSuccessHandler = function (data) {
     photos = data;
     window.pictures = photos;
 
     renderPhotos(photos, templatePictures, pictureElement, true);
   };
+
   /**
    * Функция onError обрабатывает ошибки при загрузке данных с сервера
    * @param {string} message переменная в которую записавается текст сообщения
@@ -90,6 +95,7 @@
         break;
     }
   });
+
   /**
    * Функция getPopularPhotos делает копию загруженного массива с фото
    * после чего рендерит их через функцию renderPhotos

@@ -3,10 +3,21 @@
   var LOAD_URL = 'https://js.dump.academy/kekstagram/data';
   var UPLOAD_URL = 'https://js.dump.academy/kekstagram';
 
+  /**
+   * Функция requestHandler обрабатывает запросы на сервер
+   * @param {string} requestMethod параметр в котором указывается метод запроса.
+   * @param {Function} onSuccess функция обрабатывает успешный ответ с сервера.
+   * @param {Function} onError функция обрабатывает ошибки с сервера
+   * @param {string} URL адрес на который отправляется запрос
+   * @param {Function} requestData данные передаваемые на сервер (не обязательный параметр).
+   */
   var requestHandler = function (requestMethod, onSuccess, onError, URL, requestData) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
+    /**
+     * Обработчик статусов ответа с сервера
+     */
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
         case 200:
@@ -21,10 +32,17 @@
         onError(error);
       }
     });
+
+    /**
+     * Обработчик ошибок соединения с сервером
+     */
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
 
+    /**
+     * Обработчик долгого ответа с сервера
+     */
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
@@ -33,16 +51,6 @@
     xhr.open(requestMethod, URL);
     xhr.send(requestData);
   };
-
-  /**
-     * Функция load является обработчиком события загрузки данных
-     * с указанного адреса
-     * @param {object} onSuccess это функция обрабатывающая данные
-     * полученные с сервера
-     * @param {object} onError это функция срабатывающая в случае,
-     * когда сервер возвращает статус ошибки
-     * @param {string} URL адрес сервера, откуда беруться данные.
-     */
 
   window.api = {
     requestHandler: requestHandler,

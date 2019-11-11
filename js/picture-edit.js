@@ -35,26 +35,45 @@
   var PIN_DEFAULT_POSITION = 91;
   var PIN_DEFAULT_VALUE = 20;
 
+  /**
+   * Функция onSuccessMessageEscPress обрабатывает нажатие на клавишу Escape и закрывает попап с сообщением успешной отправки файла.
+   * @param {number} evt параметр обрабатывающий нажатие на клавишу Escape.
+   */
   var onSuccessMessageEscPress = function (evt) {
     if (evt.keyCode === window.constants.keyCode.ESC) {
       closeSuccessMessage();
     }
   };
+
+  /**
+   * Функция closeSuccessMessage удаляет попап с сообщением успешной загрузки файла
+   * и удаляет события, которые обрабатывают закрытие этого попапа.
+   */
   var closeSuccessMessage = function () {
     document.querySelector('main').removeChild(successTemaplate);
     document.removeEventListener('click', closeSuccessMessage);
     document.removeEventListener('keydown', onSuccessMessageEscPress);
   };
 
+  /**
+   * Функция showSuccesMessage выводит попап с сообщением об успешной загрузке файла
+   * и закрывает попап с предпросмотром загружаемой картинки.
+   */
   var showSuccesMessage = function () {
     document.querySelector('main').appendChild(successTemaplate);
     window.popup.closePicture();
   };
+
+  /**
+   * Функция showErrorMessage выводит сообщение об ошибке в попап
+   * @param {string} message текстовое сообщение выводящее ошибку срабатывающую при загрузке
+   */
   var showErrorMessage = function (message) {
     window.popup.closePicture();
     errorTitleElement.textContent = message;
     document.querySelector('main').appendChild(errorTemplate);
   };
+
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
@@ -72,6 +91,9 @@
     window.popup.openPicture();
   });
 
+  /**
+ * Создание обработчика отправляющего форму на сервер
+ */
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.api.requestHandler('POST', showSuccesMessage, showErrorMessage, window.api.UPLOAD_URL, new FormData(uploadForm));
@@ -133,6 +155,10 @@
     }
   });
 
+  /**
+ * Создание обработчика реагирующего на неправильное заполнение
+ * поля с комментарием
+ */
   commentTextInput.addEventListener('input', function () {
     if (commentTextInput.value.length > 140) {
       commentTextInput.setCustomValidity('Длина комментария превышает максимально допустимую в 140 символов');
@@ -154,11 +180,19 @@
   var effectDepth = document.querySelector('.effect-level');
   var effectDepthValue = effectDepth.querySelector('.effect-level__value');
 
+  /**
+   * Функция getEffect возвращает значение фильтра применяемого к картинке
+   * @param {string} effectStyle параметр с именем фильтра.
+   * @param {number} effectValue параметр со значением фильтра.
+   */
   var getEffect = function (effectStyle, effectValue) {
     picturePreview.style.filter = effectStyle + effectValue;
   };
 
   var effect = null;
+  /**
+   * Обработчик события переключения эффекта.
+   */
   effectsChooser.addEventListener('input', function (chooseEvt) {
     chooseEvt.preventDefault();
 
@@ -177,6 +211,9 @@
     effectDepth.classList.remove('hidden');
   });
 
+  /**
+   * Обработчик события нажатия на клавашу мыши
+   */
   pinElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -184,6 +221,10 @@
       x: evt.clientX
     };
 
+    /**
+     * Функция обрабатывает движение мыши по гормзонтальной оси
+     * @param {HTMLElement} moveEvt элемент на котором срабатывает событие
+     */
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
@@ -224,6 +265,10 @@
       }
     };
 
+    /**
+     * Функция onMouseUp обрабатывает поднятие мыши и удаляет обработчики дижения и поднятия мыши.
+     * @param {HTMLElement} upEvt элемент на котором срабатывает обработчик.
+     */
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 

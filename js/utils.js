@@ -24,6 +24,11 @@
     return items[randomIndex];
   };
 
+  /**
+   * Функция очищает дочерние элементы узла.
+   * @param {HTMLElement} parent родительский элемент в котором удаляются элементы
+   * @param {HTMLElement} beginElement дочерний элемент с которого будут начинать удаляться элементы
+   */
   var clearNode = function (parent, beginElement) {
     var children = Array.from(parent.children);
 
@@ -31,6 +36,7 @@
       parent.removeChild(child);
     });
   };
+
   /**
    * Функция debounce выполняет устранение дребезга то есть создается пауза перед выполнением
    * переданной функции
