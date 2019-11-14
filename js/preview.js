@@ -3,6 +3,7 @@
   var pictureElement = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
   var closePreviewButton = bigPicture.querySelector('.big-picture__cancel');
+  var bodyElement = document.querySelector('body');
 
   var commentsList = document.querySelector('.social__comments');
   var templateComment = commentsList.querySelector('.social__comment');
@@ -25,7 +26,7 @@
     commentsFilterCounter = 4;
     if (firstCommetns.length > commentsFilterCounter) {
       commentLoader.classList.remove('hidden');
-      firstCommetns.map(hiddinComments);
+      firstCommetns.map(hideComments);
     }
   });
   /**
@@ -46,7 +47,7 @@
    * @param {HTMLElement} item элемент которые скрывается
    * @param {number} index индекс эелемента
    */
-  var hiddinComments = function (item, index) {
+  var hideComments = function (item, index) {
     if (index > commentsFilterCounter) {
       item.classList.add('hidden');
     }
@@ -74,6 +75,7 @@
       if (pictureUrl) {
         window.popup.globalElement = bigPicture;
         window.popup.openPicture();
+        bodyElement.classList.add('modal-open');
 
         bigPicture.querySelector('.big-picture__img img').setAttribute('src', window.pictures[i].url);
         bigPicture.querySelector('.likes-count').textContent = window.pictures[i].likes;
@@ -108,6 +110,7 @@
  */
   closePreviewButton.addEventListener('click', function () {
     window.popup.closePicture();
+    bodyElement.classList.remove('modal-open');
   });
 
 })();

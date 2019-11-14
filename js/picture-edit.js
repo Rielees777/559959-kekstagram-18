@@ -1,12 +1,29 @@
 'use strict';
 (function () {
-/**
- * Создаются функции открытия и редактирования картинок добавляемых
- * на страницу
+  /**
+ * Консианты, максимальное и иминимальное значения размера картинки
+ * а также шаг изменения размера.
  */
-  var uploadImage = document.querySelector('#upload-file');
+  var MIN_SCALE_VALUE = 25;
+  var MAX_SCALE_VALUE = 100;
+  var SCALE_STEP = 25;
+
+  var PIN_SCALE_MAX_VALUE = 455;
+  var PIN_SCALE_MIN_VALUE = 0;
+  var PIN_DEFAULT_POSITION = 455;
+  var PIN_DEFAULT_VALUE = 100;
+
+  var EffectFilter = {
+    CHROME: 'grayscale',
+    SEPIA: 'sepia',
+    MARVIN: 'invert',
+    PHOBOS: 'blur',
+    HEAT: 'brightness'
+  };
+
+  var uploadImageElement = document.querySelector('#upload-file');
   var imageEditForm = document.querySelector('.img-upload__overlay');
-  var imageClose = imageEditForm.querySelector('.img-upload__cancel');
+  var imageCloseButton = imageEditForm.querySelector('.img-upload__cancel');
 
   var effectsChooser = document.querySelector('.img-upload__effects');
   var hashTagsInput = document.querySelector('.text__hashtags');
@@ -18,22 +35,16 @@
   var picturePreview = document.querySelector('.img-upload__preview img');
   var percentSign = '%';
 
-  var uploadForm = document.querySelector('.img-upload__form');
-  var successTemaplate = document.querySelector('#success').content.querySelector('.success');
+  var uploadFormElement = document.querySelector('.img-upload__form');
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorTitleElement = errorTemplate.querySelector('.error__title');
-  /**
- * Консианты, максимальное и иминимальное значения размера картинки
- * а также шаг изменения размера.
- */
-  var MIN_SCALE_VALUE = 25;
-  var MAX_SCALE_VALUE = 100;
-  var SCALE_STEP = 25;
+  var mainWindow = document.querySelector('main');
 
-  var PIN_SCALE_MAX_VALUE = 455;
-  var PIN_SCALE_MIN_VALUE = 0;
-  var PIN_DEFAULT_POSITION = 91;
-  var PIN_DEFAULT_VALUE = 20;
+  var pinElement = document.querySelector('.effect-level__pin');
+  var effectDepthLine = document.querySelector('.effect-level__depth');
+  var effectDepth = document.querySelector('.effect-level');
+  var effectDepthValue = effectDepth.querySelector('.effect-level__value');
 
   /**
    * Функция onSuccessMessageEscPress обрабатывает нажатие на клавишу Escape и закрывает попап с сообщением успешной отправки файла.
@@ -44,23 +55,32 @@
       closeSuccessMessage();
     }
   };
-
+  window.onErrorMessageEscPress = function (evt) {
+    if (evt.keyCode === window.constants.keyCode.ESC) {
+      window.closeErrorMessage();
+    }
+  };
   /**
    * Функция closeSuccessMessage удаляет попап с сообщением успешной загрузки файла
    * и удаляет события, которые обрабатывают закрытие этого попапа.
    */
   var closeSuccessMessage = function () {
-    document.querySelector('main').removeChild(successTemaplate);
+    mainWindow.removeChild(successTemplate);
     document.removeEventListener('click', closeSuccessMessage);
     document.removeEventListener('keydown', onSuccessMessageEscPress);
   };
 
+  window.closeErrorMessage = function () {
+    mainWindow.removeChild(errorTemplate);
+    document.removeEventListener('click', window.closeErrorMessage);
+    document.removeEventListener('keydown', window.onErrorMessageEscPress);
+  };
   /**
    * Функция showSuccesMessage выводит попап с сообщением об успешной загрузке файла
    * и закрывает попап с предпросмотром загружаемой картинки.
    */
   var showSuccesMessage = function () {
-    document.querySelector('main').appendChild(successTemaplate);
+    mainWindow.appendChild(successTemplate);
     window.popup.closePicture();
   };
 
@@ -71,14 +91,16 @@
   var showErrorMessage = function (message) {
     window.popup.closePicture();
     errorTitleElement.textContent = message;
-    document.querySelector('main').appendChild(errorTemplate);
+    mainWindow.appendChild(errorTemplate);
+    document.addEventListener('click', window.closeErrorMessage);
+    document.addEventListener('keydown', window.onErrorMessageEscPress);
   };
 
   /**
  * Создание обработчика открывающего форму редактирования картинки после
  * загрузки изображения
  */
-  uploadImage.addEventListener('change', function (evt) {
+  uploadImageElement.addEventListener('change', function (evt) {
     evt.preventDefault();
     var reader = new FileReader();
 
@@ -89,14 +111,16 @@
     reader.readAsDataURL(evt.target.files[0]);
     window.popup.globalElement = imageEditForm;
     window.popup.openPicture();
+    resetsToDefaultForm();
+    picturePreview.style.transform = 'none';
   });
 
   /**
  * Создание обработчика отправляющего форму на сервер
  */
-  uploadForm.addEventListener('submit', function (evt) {
+  uploadFormElement.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.api.requestHandler('POST', showSuccesMessage, showErrorMessage, window.api.UPLOAD_URL, new FormData(uploadForm));
+    window.api.requestHandler('POST', showSuccesMessage, showErrorMessage, window.api.UPLOAD_URL, new FormData(uploadFormElement));
 
     document.addEventListener('click', closeSuccessMessage);
     document.addEventListener('keydown', onSuccessMessageEscPress);
@@ -105,7 +129,7 @@
   /**
  * Создание обработчика закрывающего форму редактирования
  */
-  imageClose.addEventListener('click', function () {
+  imageCloseButton.addEventListener('click', function () {
     window.popup.closePicture();
   });
 
@@ -135,11 +159,13 @@
     }
   });
 
+  var removeEscEvent = function () {
+    document.removeEventListener('keydown', window.popup.onPictureEscPress);
+  };
   /**
  * Создание обработчика реагирующего на неправильное заполнение
  * поля с хэштегами
  */
-
   hashTagsInput.addEventListener('input', function () {
     var hashTagsArray = hashTagsInput.value.split(' ');
 
@@ -151,9 +177,38 @@
     for (var i = 0; i < hashTagsArray.length; i++) {
       if (hashTagsArray[i][0] !== '#') {
         hashTagsInput.setCustomValidity('Хэштег должен начинаться с символа #');
+      } else if (hashTagsArray[i].length > 20) {
+        hashTagsInput.setCustomValidity('Длина хештега должна быть не больше 20 символов');
       }
     }
+    if (getSimilarHashtags(hashTagsArray)) {
+      hashTagsInput.setCustomValidity('Хэштеги не должны повторяться');
+    }
   });
+  hashTagsInput.addEventListener('focus', removeEscEvent);
+  hashTagsInput.addEventListener('blur', window.popup.openPicture);
+
+  var getSimilarHashtags = function (hashTags) {
+    var similarHahstags = [];
+    for (var i = 0; i < hashTags.length; i++) {
+      for (var j = i - 1; j >= 0; j--) {
+        if (hashTags[j] === hashTags[i]) {
+          var isUnique = true;
+          for (var k = 0; k < similarHahstags.length; k++) {
+            if (similarHahstags[k] === hashTags[i]) {
+              isUnique = false;
+              break;
+            }
+          }
+          if (isUnique) {
+            similarHahstags.push(hashTags[i]);
+          }
+          break;
+        }
+      }
+    }
+    return similarHahstags.length;
+  };
 
   /**
  * Создание обработчика реагирующего на неправильное заполнение
@@ -167,18 +222,8 @@
     }
   });
 
-  var effectsList = {
-    chrome: 'grayscale',
-    sepia: 'sepia',
-    marvin: 'invert',
-    phobos: 'blur',
-    heat: 'brightness'
-  };
-
-  var pinElement = document.querySelector('.effect-level__pin');
-  var effectDepthLine = document.querySelector('.effect-level__depth');
-  var effectDepth = document.querySelector('.effect-level');
-  var effectDepthValue = effectDepth.querySelector('.effect-level__value');
+  commentTextInput.addEventListener('focus', removeEscEvent);
+  commentTextInput.addEventListener('blur', window.popup.openPicture);
 
   /**
    * Функция getEffect возвращает значение фильтра применяемого к картинке
@@ -187,6 +232,42 @@
    */
   var getEffect = function (effectStyle, effectValue) {
     picturePreview.style.filter = effectStyle + effectValue;
+  };
+
+  var switchEffect = function (effect) {
+    pinElement.value = PIN_DEFAULT_VALUE;
+    effectDepthValue.value = Math.round(pinElement.offsetLeft / PIN_SCALE_MAX_VALUE * 100);
+
+    switch (effect) {
+      case 'none':
+        resetsToDefaultForm();
+        break;
+      case 'chrome':
+        getEffect(EffectFilter.CHROME, '(' + effectDepthValue.value / 100 + ')');
+        break;
+      case 'sepia':
+        getEffect(EffectFilter.SEPIA, '(' + effectDepthValue.value / 100 + ')');
+        break;
+      case 'marvin':
+        getEffect(EffectFilter.MARVIN, '(' + effectDepthValue.value + '%)');
+        break;
+      case 'phobos':
+        getEffect(EffectFilter.PHOBOS, '(' + effectDepthValue.value / 100 * 3 + 'px)');
+        break;
+      case 'heat':
+        getEffect(EffectFilter.HEAT, '(' + effectDepthValue.value / 100 * 2 + ')');
+        break;
+      default:
+        picturePreview.style.filter = 'none';
+        effectDepth.classList.add('hidden');
+    }
+  };
+
+  var resetsToDefaultForm = function () {
+    picturePreview.style.filter = 'none';
+    effectDepth.classList.add('hidden');
+    hashTagsInput.value = '';
+    commentTextInput.value = '';
   };
 
   var effect = null;
@@ -199,16 +280,9 @@
     effect = chooseEvt.target.value;
     pinElement.style.left = PIN_DEFAULT_POSITION + 'px';
     effectDepthLine.style.width = PIN_DEFAULT_POSITION + 'px';
-    pinElement.value = PIN_DEFAULT_VALUE;
-    picturePreview.style.filter = 'none';
-
-    if (effect === 'none') {
-      picturePreview.style.filter = 'none';
-      effectDepth.classList.add('hidden');
-      return;
-    }
 
     effectDepth.classList.remove('hidden');
+    switchEffect(effect);
   });
 
   /**
@@ -245,24 +319,7 @@
         pinElement.style.left = PIN_SCALE_MIN_VALUE + 'px';
       }
 
-      effectDepthValue.value = Math.round(pinElement.offsetLeft / PIN_SCALE_MAX_VALUE * 100);
-      switch (effect) {
-        case 'chrome':
-          getEffect(effectsList.chrome, '(' + effectDepthValue.value / 100 + ')');
-          break;
-        case 'sepia':
-          getEffect(effectsList.sepia, '(' + effectDepthValue.value / 100 + ')');
-          break;
-        case 'marvin':
-          getEffect(effectsList.marvin, '(' + effectDepthValue.value + '%)');
-          break;
-        case 'phobos':
-          getEffect(effectsList.phobos, '(' + effectDepthValue.value / 100 * 3 + 'px)');
-          break;
-        case 'heat':
-          getEffect(effectsList.heat, '(' + effectDepthValue.value / 100 * 2 + ')');
-          break;
-      }
+      switchEffect(effect);
     };
 
     /**

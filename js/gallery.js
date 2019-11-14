@@ -3,6 +3,7 @@
   var pictureElement = document.querySelector('.pictures');
   var templatePictures = document.querySelector('#picture').content.querySelector('.picture');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var mainWindow = document.querySelector('main');
 
   var errorTitleElement = errorTemplate.querySelector('.error__title');
   var imgFilters = document.querySelector('.img-filters');
@@ -12,7 +13,7 @@
   });
 
   var imageFilterForm = imgFilters.querySelector('.img-filters__form');
-  var filtersButton = imageFilterForm.querySelectorAll('.img-filters__button');
+  var filterButtons = imageFilterForm.querySelectorAll('.img-filters__button');
 
   /**
     * Функция getPhotosArray отрисовывает на странице  все элементы полученные из массива
@@ -48,6 +49,7 @@
     photos = data;
     window.pictures = photos;
 
+    imgFilters.classList.remove('hidden');
     renderPhotos(photos, templatePictures, pictureElement, true);
   };
 
@@ -59,7 +61,9 @@
   var onErrorResponse = function (message) {
     errorTitleElement.textContent = message;
 
-    pictureElement.appendChild(errorTemplate);
+    mainWindow.appendChild(errorTemplate);
+    document.addEventListener('click', window.closeErrorMessage);
+    document.addEventListener('keydown', window.onErrorMessageEscPress);
   };
 
   window.api.requestHandler('GET', onSuccessHandler, onErrorResponse, window.api.LOAD_URL);
@@ -73,7 +77,7 @@
   imageFilterForm.addEventListener('click', function (evt) {
     evt.preventDefault();
 
-    filtersButton.forEach(function (item) {
+    filterButtons.forEach(function (item) {
       item.classList.remove('img-filters__button--active');
     });
 

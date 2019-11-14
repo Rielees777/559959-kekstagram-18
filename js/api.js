@@ -8,10 +8,10 @@
    * @param {string} requestMethod параметр в котором указывается метод запроса.
    * @param {Function} onSuccess функция обрабатывает успешный ответ с сервера.
    * @param {Function} onError функция обрабатывает ошибки с сервера
-   * @param {string} URL адрес на который отправляется запрос
+   * @param {string} url адрес на который отправляется запрос
    * @param {Function} requestData данные передаваемые на сервер (не обязательный параметр).
    */
-  var requestHandler = function (requestMethod, onSuccess, onError, URL, requestData) {
+  var requestHandler = function (requestMethod, onSuccess, onError, url, requestData) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -48,7 +48,7 @@
     });
     xhr.timeout = 10000;
 
-    xhr.open(requestMethod, URL);
+    xhr.open(requestMethod, url);
     xhr.send(requestData);
   };
 

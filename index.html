@@ -13,7 +13,7 @@
   <main>
 
     <!-- Фильтрация изображений от других пользователей -->
-    <section class="img-filters  img-filters--inactive  container">
+    <section class="img-filters  img-filters--inactive  container hidden">
       <h2 class="img-filters__title  visually-hidden">Фильтр фотографий</h2>
       <form class="img-filters__form" action="index.html" method="get" autocomplete="off">
         <button type=button class="img-filters__button  img-filters__button--active" id="filter-popular">Популярные</button>
@@ -57,7 +57,7 @@
 
                   <!-- Изменение глубины эффекта, накладываемого на изображение -->
                   <fieldset class="img-upload__effect-level  effect-level hidden">
-                    <input class="effect-level__value" type="number" name="effect-level" value="20">
+                    <input class="effect-level__value" type="number" name="effect-level" value="100">
                     <div class="effect-level__line">
                       <div class="effect-level__pin" tabindex="0">Кнопка изменения глубины эффекта фотографии</div>
                       <div class="effect-level__depth">Глубина эффекта фотографии</div>
