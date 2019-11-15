@@ -159,9 +159,13 @@
     }
   });
 
+  /**
+ * Функция удаляет обработчик события нажатия на клавишу Escape
+ */
   var removeEscEvent = function () {
     document.removeEventListener('keydown', window.popup.onPictureEscPress);
   };
+
   /**
  * Создание обработчика реагирующего на неправильное заполнение
  * поля с хэштегами
@@ -185,9 +189,15 @@
       hashTagsInput.setCustomValidity('Хэштеги не должны повторяться');
     }
   });
+
   hashTagsInput.addEventListener('focus', removeEscEvent);
   hashTagsInput.addEventListener('blur', window.popup.openPicture);
 
+  /**
+   * Функция проверяет есть ли в строке одинаковые хештеги
+   * @param {Array} hashTags параметр принимающий массив хештегов
+   * @return {number} возращается колличество одинаковых хештегов
+   */
   var getSimilarHashtags = function (hashTags) {
     var similarHahstags = [];
     for (var i = 0; i < hashTags.length; i++) {
@@ -234,6 +244,10 @@
     picturePreview.style.filter = effectStyle + effectValue;
   };
 
+  /**
+   * Функция применяет  свойство фильтра в зависимости от переданного в нее параметра.
+   * @param {string} effect строка с названием применяемого фильтра.
+   */
   var switchEffect = function (effect) {
     pinElement.value = PIN_DEFAULT_VALUE;
     effectDepthValue.value = Math.round(pinElement.offsetLeft / PIN_SCALE_MAX_VALUE * 100);
@@ -263,6 +277,9 @@
     }
   };
 
+  /**
+   * Функция сбрасывает поля и значения формы по-умолчанию.
+   */
   var resetsToDefaultForm = function () {
     picturePreview.style.filter = 'none';
     effectDepth.classList.add('hidden');

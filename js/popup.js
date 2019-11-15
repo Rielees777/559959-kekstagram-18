@@ -8,6 +8,7 @@
   var onPictureEscPress = function (evt) {
     if (evt.keyCode === window.constants.keyCode.ESC) {
       closePicture();
+      window.bodyElement.classList.remove('modal-open');
     }
   };
 
