@@ -11,13 +11,21 @@
   var commentLoader = bigPicture.querySelector('.comments-loader');
 
   /**
-   * Обработчик отрывающее превью при клике на картинку
-   */
-  pictureElement.addEventListener('click', function (evt) {
+ * Функция обработчик события срабатывающее при нажатии на картинку в галерее
+ * @param {HTMLElement} evt DOM элемент на котором сработало событие.
+ */
+  var openPicturePreviewHandler = function (evt) {
     window.utils.clearNode(commentsList, 0);
-
     var srcAttribute = evt.target.src;
 
+    createCommentFilter(srcAttribute);
+  };
+
+  /**
+   * Функция фильтрует комментарии к картинке превью.
+   * @param {string} srcAttribute - строка с адресом расположения картики на сервере
+   */
+  var createCommentFilter = function (srcAttribute) {
     if (!srcAttribute) {
       return;
     }
@@ -27,6 +35,18 @@
     if (firstCommetns.length > commentsFilterCounter) {
       commentLoader.classList.remove('hidden');
       firstCommetns.forEach(hideComments);
+    }
+  };
+  /**
+   * Обработчик отрывающее превью при клике на картинку
+   */
+  pictureElement.addEventListener('click', openPicturePreviewHandler);
+  pictureElement.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.constants.keyCode.ENTER) {
+      window.utils.clearNode(commentsList, 0);
+      var srcAttribute = evt.target.children[0].src;
+
+      createCommentFilter(srcAttribute);
     }
   });
   /**

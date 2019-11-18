@@ -38,6 +38,8 @@
 
   var uploadFormElement = document.querySelector('.img-upload__form');
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
+  var successTemplateBtn = successTemplate.querySelector('.success__button');
+
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorTitleElement = errorTemplate.querySelector('.error__title');
   var mainWindow = document.querySelector('main');
@@ -62,7 +64,7 @@
     }
   };
   /**
-   * Функция closeSuccessMessage удаляет попап с сообщением успешной загрузки файла
+   * Функция onCloseSuccessMessage удаляет попап с сообщением успешной загрузки файла
    * и удаляет события, которые обрабатывают закрытие этого попапа.
    */
   var onCloseSuccessMessage = function () {
@@ -82,6 +84,7 @@
    */
   var showSuccesMessage = function () {
     mainWindow.appendChild(successTemplate);
+    successTemplateBtn.focus();
     window.popup.closePicture();
   };
 
