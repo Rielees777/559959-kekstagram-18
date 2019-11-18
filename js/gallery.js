@@ -15,6 +15,17 @@
   var imageFilterForm = imgFilters.querySelector('.img-filters__form');
   var filterButtons = imageFilterForm.querySelectorAll('.img-filters__button');
 
+  var renderPictureElement = function (template, photosArray, parent) {
+    for (var i = 0; i < photosArray.length; i++) {
+      var newPicture = template.cloneNode(true);
+
+      newPicture.querySelector('.picture__img').src = photosArray[i].url;
+      newPicture.querySelector('.picture__likes').textContent = photosArray[i].likes;
+      newPicture.querySelector('.picture__comments').textContent = photosArray[i].comments.length;
+
+      parent.appendChild(newPicture);
+    }
+  };
   /**
     * Функция getPhotosArray отрисовывает на странице  все элементы полученные из массива
     * @param {array} photosArray переменная через которую происходит взаимодействие с каждым элементом
@@ -27,16 +38,7 @@
     if (clearDOMElements) {
       window.utils.clearNode(parent, 2);
     }
-
-    for (var i = 0; i < photosArray.length; i++) {
-      var newPicture = template.cloneNode(true);
-
-      newPicture.querySelector('.picture__img').src = photosArray[i].url;
-      newPicture.querySelector('.picture__likes').textContent = photosArray[i].likes;
-      newPicture.querySelector('.picture__comments').textContent = photosArray[i].comments.length;
-
-      parent.appendChild(newPicture);
-    }
+    renderPictureElement(template, photosArray, parent);
   };
 
   var photos = [];
@@ -62,7 +64,7 @@
     errorTitleElement.textContent = message;
 
     mainWindow.appendChild(errorTemplate);
-    document.addEventListener('click', window.closeErrorMessage);
+    document.addEventListener('click', window.onCloseErrorMessage);
     document.addEventListener('keydown', window.onErrorMessageEscPress);
   };
 

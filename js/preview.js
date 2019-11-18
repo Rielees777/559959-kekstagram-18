@@ -26,7 +26,7 @@
     commentsFilterCounter = 4;
     if (firstCommetns.length > commentsFilterCounter) {
       commentLoader.classList.remove('hidden');
-      firstCommetns.map(hideComments);
+      firstCommetns.forEach(hideComments);
     }
   });
   /**
@@ -35,7 +35,7 @@
   commentLoader.addEventListener('click', function () {
     var secondComments = Array.from(commentsList.querySelectorAll('.social__comment'));
     commentsFilterCounter = commentsFilterCounter + 5;
-    secondComments.map(showComments);
+    secondComments.forEach(showComments);
 
     if (commentsFilterCounter >= secondComments.length) {
       commentLoader.classList.add('hidden');
@@ -73,21 +73,24 @@
       var pictureUrl = pictureSrc.indexOf(window.pictures[i].url) !== -1;
 
       if (pictureUrl) {
-        window.popup.globalElement = bigPicture;
-        window.popup.openPicture();
-        window.bodyElement.classList.add('modal-open');
-
-        bigPicture.querySelector('.big-picture__img img').setAttribute('src', window.pictures[i].url);
-        bigPicture.querySelector('.likes-count').textContent = window.pictures[i].likes;
-        bigPicture.querySelector('.comments-count').textContent = window.pictures[i].comments.length;
-        renderComments(i, window.pictures[i].comments.length);
-
-        bigPicture.querySelector('.social__caption').textContent = window.pictures[i].description;
-        bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+        renderPreviewPictureElement(i);
       }
     }
   };
 
+  var renderPreviewPictureElement = function (pictureCounter) {
+    window.popup.globalElement = bigPicture;
+    window.popup.openPicture();
+    window.bodyElement.classList.add('modal-open');
+
+    bigPicture.querySelector('.big-picture__img img').setAttribute('src', window.pictures[pictureCounter].url);
+    bigPicture.querySelector('.likes-count').textContent = window.pictures[pictureCounter].likes;
+    bigPicture.querySelector('.comments-count').textContent = window.pictures[pictureCounter].comments.length;
+    renderComments(pictureCounter, window.pictures[pictureCounter].comments.length);
+
+    bigPicture.querySelector('.social__caption').textContent = window.pictures[pictureCounter].description;
+    bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+  };
   /**
    * Функция renderComments рендерит комментарии к картинке
    * @param {HTMLElement} currentPhoto фото в которой рендерятся картинки

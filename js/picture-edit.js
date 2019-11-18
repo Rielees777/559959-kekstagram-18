@@ -26,6 +26,7 @@
   var imageCloseButton = imageEditForm.querySelector('.img-upload__cancel');
 
   var effectsChooser = document.querySelector('.img-upload__effects');
+  var pictureMiniDefault = effectsChooser.querySelector('#effect-none');
   var hashTagsInput = document.querySelector('.text__hashtags');
   var commentTextInput = document.querySelector('.text__description');
 
@@ -52,27 +53,27 @@
    */
   var onSuccessMessageEscPress = function (evt) {
     if (evt.keyCode === window.constants.keyCode.ESC) {
-      closeSuccessMessage();
+      onCloseSuccessMessage();
     }
   };
   window.onErrorMessageEscPress = function (evt) {
     if (evt.keyCode === window.constants.keyCode.ESC) {
-      window.closeErrorMessage();
+      window.onCloseErrorMessage();
     }
   };
   /**
    * Функция closeSuccessMessage удаляет попап с сообщением успешной загрузки файла
    * и удаляет события, которые обрабатывают закрытие этого попапа.
    */
-  var closeSuccessMessage = function () {
+  var onCloseSuccessMessage = function () {
     mainWindow.removeChild(successTemplate);
-    document.removeEventListener('click', closeSuccessMessage);
+    document.removeEventListener('click', onCloseSuccessMessage);
     document.removeEventListener('keydown', onSuccessMessageEscPress);
   };
 
-  window.closeErrorMessage = function () {
+  window.onCloseErrorMessage = function () {
     mainWindow.removeChild(errorTemplate);
-    document.removeEventListener('click', window.closeErrorMessage);
+    document.removeEventListener('click', window.onCloseErrorMessage);
     document.removeEventListener('keydown', window.onErrorMessageEscPress);
   };
   /**
@@ -103,11 +104,9 @@
   uploadImageElement.addEventListener('change', function (evt) {
     evt.preventDefault();
     var reader = new FileReader();
-
     reader.addEventListener('load', function () {
       picturePreview.src = reader.result;
     });
-
     reader.readAsDataURL(evt.target.files[0]);
     window.popup.globalElement = imageEditForm;
     window.popup.openPicture();
@@ -121,8 +120,9 @@
   uploadFormElement.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.api.requestHandler('POST', showSuccesMessage, showErrorMessage, window.api.UPLOAD_URL, new FormData(uploadFormElement));
+    uploadImageElement.value = '';
 
-    document.addEventListener('click', closeSuccessMessage);
+    document.addEventListener('click', onCloseSuccessMessage);
     document.addEventListener('keydown', onSuccessMessageEscPress);
   });
 
@@ -162,7 +162,7 @@
   /**
  * Функция удаляет обработчик события нажатия на клавишу Escape
  */
-  var removeEscEvent = function () {
+  var removeEscEventHandler = function () {
     document.removeEventListener('keydown', window.popup.onPictureEscPress);
   };
 
@@ -190,7 +190,7 @@
     }
   });
 
-  hashTagsInput.addEventListener('focus', removeEscEvent);
+  hashTagsInput.addEventListener('focus', removeEscEventHandler);
   hashTagsInput.addEventListener('blur', window.popup.openPicture);
 
   /**
@@ -232,7 +232,7 @@
     }
   });
 
-  commentTextInput.addEventListener('focus', removeEscEvent);
+  commentTextInput.addEventListener('focus', removeEscEventHandler);
   commentTextInput.addEventListener('blur', window.popup.openPicture);
 
   /**
@@ -281,6 +281,8 @@
    * Функция сбрасывает поля и значения формы по-умолчанию.
    */
   var resetsToDefaultForm = function () {
+    scalePictureValue.value = MAX_SCALE_VALUE + '%';
+    pictureMiniDefault.checked = true;
     picturePreview.style.filter = 'none';
     effectDepth.classList.add('hidden');
     hashTagsInput.value = '';
