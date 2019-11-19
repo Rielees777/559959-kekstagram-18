@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-
+  var uploadImageElement = document.querySelector('#upload-file');
   /**
  * Функция выполняет закрытие формы редактирования картинки по нажатию клавиши Esc
  * @param {number} evt переменная принимает значение кнопки Esc
@@ -8,6 +8,7 @@
   var onPictureEscPress = function (evt) {
     if (evt.keyCode === window.constants.keyCode.ESC) {
       closePicture();
+      uploadImageElement.value = '';
       window.bodyElement.classList.remove('modal-open');
     }
   };
